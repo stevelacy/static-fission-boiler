@@ -12,5 +12,3 @@ pids
 logs
 npm-debug.log
 node_modules
-
-newrelic.js
