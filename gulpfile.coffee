@@ -1,6 +1,6 @@
 http = require 'http'
 gulp = require 'gulp'
-es = require 'ecstatic'
+express = require 'express'
 
 source     = require 'vinyl-source-stream'
 buffer     = require 'vinyl-buffer'
@@ -41,9 +41,11 @@ paths =
   config: './server/config/*.json'
 
 gulp.task 'server', (cb) ->
-  port = 5000
-  server = http.createServer es root: './'
-  server.listen port, cb
+  app = express()
+  app.use express.static "#{__dirname}/public"
+  app.get '/*', (req, res) ->
+    res.sendFile "#{__dirname}/public/index.html"
+  app.listen 5000
 
 # javascript
 args =
@@ -75,7 +77,6 @@ gulp.task 'stylus', ->
     .pipe stylus
       use:[
         nib()
-        autoprefixer cascade: true
       ]
     .pipe sourcemaps.write()
     .pipe concat 'app.css'
